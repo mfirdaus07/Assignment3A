@@ -18,6 +18,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -25,6 +26,11 @@ import javax.swing.JTable;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.SwingConstants;
 
 public class GUI1 {
 
@@ -63,12 +69,12 @@ public class GUI1 {
 	private void initialize() {
 		frmShortVideoDatabase = new JFrame();
 		frmShortVideoDatabase.setTitle("Short Video Database System");
-		frmShortVideoDatabase.setBounds(100, 100, 450, 407);
+		frmShortVideoDatabase.setBounds(100, 100, 469, 407);
 		frmShortVideoDatabase.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmShortVideoDatabase.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 11, 414, 136);
+		panel.setBounds(10, 11, 433, 136);
 		frmShortVideoDatabase.getContentPane().add(panel);
 		panel.setLayout(null);
 		
@@ -110,7 +116,7 @@ public class GUI1 {
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setForeground(Color.RED);
-		panel_1.setBounds(10, 158, 414, 35);
+		panel_1.setBounds(10, 158, 433, 35);
 		frmShortVideoDatabase.getContentPane().add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -179,22 +185,17 @@ public class GUI1 {
 		panel_1.add(btnNewButton_2);
 		
 		JButton btnNewButton_4 = new JButton("Test");
-		btnNewButton_4.setBounds(315, 6, 89, 23);
+		btnNewButton_4.setBounds(334, 6, 89, 23);
 		panel_1.add(btnNewButton_4);
 		btnNewButton_4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showMessageDialog(null, "Proton X50:"
-						+ "\nBasic Salary: RM 4,500"
-						+ "\nMonthly installment: RM 800"
-						+ "\nHorsePower: 175PS"
-						+ "\nFeatures: 1.Comprehensive ADAS suite and safety features \n2.Hi-tech infotainment system"
-						+ "\nAccesories: 1.Electric Powered Tailgate | 2.Coil Mats | 3.Sunshades");
+				JOptionPane.showMessageDialog(null, "Test");
 			}
 		});
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 203, 414, 98);
+		scrollPane.setBounds(10, 203, 433, 98);
 		frmShortVideoDatabase.getContentPane().add(scrollPane);
 		
 		table = new JTable();
@@ -209,12 +210,12 @@ public class GUI1 {
 		scrollPane.setViewportView(table);
 		
 		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(10, 312, 414, 45);
+		panel_2.setBounds(10, 312, 433, 45);
 		frmShortVideoDatabase.getContentPane().add(panel_2);
 		panel_2.setLayout(null);
 		
 		JButton btnNewButton_5 = new JButton("Exit");
-		btnNewButton_5.setBounds(315, 11, 89, 23);
+		btnNewButton_5.setBounds(349, 11, 74, 23);
 		panel_2.add(btnNewButton_5);
 		
 		JButton btnNewButton_3 = new JButton("Print");
@@ -230,12 +231,91 @@ public class GUI1 {
 				}	
 			}
 		});
-		btnNewButton_3.setBounds(102, 11, 89, 23);
+		btnNewButton_3.setBounds(252, 11, 87, 23);
 		panel_2.add(btnNewButton_3);
 		
-		JButton btnNewButton_6 = new JButton("Export");
-		btnNewButton_6.setBounds(10, 11, 82, 23);
+		JButton btnNewButton_6 = new JButton("Export Text");
+		btnNewButton_6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			
+				try{
+	                //the file path
+	               File file = new File("C:\\Users\\User\\Desktop\\Lol.txt"); //change dir for file
+	               //if the file not exist create one
+	               if(!file.exists()){
+	                   file.createNewFile();
+	               }
+	               
+	               FileWriter fw = new FileWriter(file.getAbsoluteFile());
+	               BufferedWriter bw = new BufferedWriter(fw);
+	               
+	               //loop for jtable rows
+	               for(int i = 0; i < table.getRowCount(); i++){
+	                   //loop for jtable column
+	                   for(int j = 0; j < table.getColumnCount(); j++){
+	                       bw.write(table.getModel().getValueAt(i, j)+" ");
+	                   }
+	                   //break line at the begin 
+	                   //break line at the end 
+	                   //bw.write("\n_________\n");
+	                   bw.write("\n\n");
+	               }
+	               //close BufferedWriter
+	               bw.close();
+	               //close FileWriter 
+	               fw.close();
+	               JOptionPane.showMessageDialog(null, "Data Exported");
+	               
+	               }catch(Exception ex){
+	                   ex.printStackTrace();
+	               }
+				
+			}
+		});
+		btnNewButton_6.setBounds(0, 11, 107, 23);
 		panel_2.add(btnNewButton_6);
+		
+		JButton btnNewButton_7 = new JButton("Export CSV");
+		btnNewButton_7.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				JFileChooser fileChooser = new JFileChooser();
+		        fileChooser.setDialogTitle("Specify a file save");
+		        int userSelection = fileChooser.showSaveDialog(null);
+		        if(userSelection == JFileChooser.APPROVE_OPTION){
+		            File fileToSave = fileChooser.getSelectedFile();
+		            //lets write to file
+		         
+		            try {
+		                  FileWriter fw = new FileWriter(fileToSave + ".csv");
+		                BufferedWriter bw = new BufferedWriter(fw);
+		                
+		                for(int i = 0; i < table.getRowCount(); i++){
+			                   //loop for jtable column
+			                   for(int j = 0; j < table.getColumnCount(); j++){
+			                       //bw.write(table.getModel().getValueAt(i, j)+" ");
+		                //for (int i = 0; table.getRowCount(); i++) {
+		                    //for (int j = 0; table.getColumnCount(); j++) {
+		                        //write
+		                        bw.write(table.getValueAt(i, j).toString()+",");
+		                    }
+		                    bw.newLine();//record per line 
+		                }
+		                JOptionPane.showMessageDialog(null, "Data Exported Succesfuly","Information",JOptionPane.INFORMATION_MESSAGE);
+		                bw.close();
+		                fw.close();
+		            } catch (IOException ex) {
+		               JOptionPane.showMessageDialog(null, "ERROR","ERROR MESSAGE",JOptionPane.ERROR_MESSAGE);
+		            }
+		            
+		            
+		        }
+			}
+		});
+		btnNewButton_7.setBounds(135, 11, 107, 23);
+		panel_2.add(btnNewButton_7);
 		btnNewButton_5.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
